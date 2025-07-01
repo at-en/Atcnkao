@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATcn考试系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showHome()">
+                <i class="bi bi-book-fill me-2"></i>ATcn考试系统
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showHome()">首页</a>
+                    </li>
+                    <li class="nav-item" id="examNav" style="display: none;">
+                        <a class="nav-link" href="#" onclick="showExam()">开始考试</a>
+                    </li>
+                    <li class="nav-item" id="wrongQuestionsNav" style="display: none;">
+                        <a class="nav-link" href="#" onclick="showWrongQuestions()">错题本</a>
+                    </li>
+                    <li class="nav-item" id="historyNav" style="display: none;">
+                        <a class="nav-link" href="#" onclick="showHistory()">考试记录</a>
+                    </li>
+                    <li class="nav-item" id="adminNav" style="display: none;">
+                        <a class="nav-link" href="#" onclick="showAdmin()">管理后台</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="loginNav">
+                        <a class="nav-link" href="#" onclick="showLogin()">登录</a>
+                    </li>
+                    <li class="nav-item" id="registerNav">
+                        <a class="nav-link" href="#" onclick="showRegister()">注册</a>
+                    </li>
+                    <li class="nav-item dropdown" id="userNav" style="display: none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="usernameDisplay"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="showProfile()"><i class="bi bi-person"></i> 个人资料</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showChangePassword()"><i class="bi bi-key"></i> 修改密码</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <div class="container mt-4">
+        <!-- 首页 -->
+        <div id="homePage" class="page">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="text-center mb-5">
+                        <h1 class="display-4 fw-bold text-primary">ATcn考试系统</h1>
+                        <p class="lead">专业的在线考试平台，支持多种题型，智能判分，错题复习</p>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-pencil-square text-primary fs-1 mb-3"></i>
+                                    <h5 class="card-title">在线考试</h5>
+                                    <p class="card-text">随机抽取140道题目，包含多选、单选、判断题</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-graph-up text-success fs-1 mb-3"></i>
+                                    <h5 class="card-title">智能判分</h5>
+                                    <p class="card-text">自动评分，实时查看成绩和答题统计</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-bookmark-x text-warning fs-1 mb-3"></i>
+                                    <h5 class="card-title">错题本</h5>
+                                    <p class="card-text">收集错题，针对性复习，提高学习效率</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <button class="btn btn-primary btn-lg" onclick="showLogin()">开始使用</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 登录页面 -->
+        <div id="loginPage" class="page" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h3 class="card-title text-center mb-4">用户登录</h3>
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginUsername" class="form-label">用户名</label>
+                                    <input type="text" class="form-control" id="loginUsername" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">密码</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">登录</button>
+                            </form>
+                            <div class="text-center mt-3">
+                                <a href="#" onclick="showRegister()">还没有账号？立即注册</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 个人资料页面 -->
+        <div id="profilePage" class="page" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h4><i class="bi bi-person"></i> 个人资料</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="profileForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="profileUsername" class="form-label">用户名</label>
+                                            <input type="text" class="form-control" id="profileUsername" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="profileEmail" class="form-label">邮箱</label>
+                                            <input type="email" class="form-control" id="profileEmail">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="profileRole" class="form-label">角色</label>
+                                            <input type="text" class="form-control" id="profileRole" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="profileCreated" class="form-label">注册时间</label>
+                                            <input type="text" class="form-control" id="profileCreated" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">更新资料</button>
+                                <button type="button" class="btn btn-secondary" onclick="showHome()">取消</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 修改密码页面 -->
+        <div id="changePasswordPage" class="page" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h4><i class="bi bi-key"></i> 修改密码</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="changePasswordForm">
+                                <div class="mb-3">
+                                    <label for="oldPassword" class="form-label">当前密码</label>
+                                    <input type="password" class="form-control" id="oldPassword" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newPassword" class="form-label">新密码</label>
+                                    <input type="password" class="form-control" id="newPassword" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmNewPassword" class="form-label">确认新密码</label>
+                                    <input type="password" class="form-control" id="confirmNewPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">修改密码</button>
+                                <button type="button" class="btn btn-secondary" onclick="showHome()">取消</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 考试页面 -->
+        <div id="examPage" class="page" style="display: none;">
+            <div id="examStart">
+                <div class="text-center">
+                    <h2>开始考试</h2>
+                    <p class="lead">本次考试共140道题，包含：</p>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success"></i> 多选题：60道</li>
+                        <li><i class="bi bi-check-circle text-success"></i> 单选题：60道</li>
+                        <li><i class="bi bi-check-circle text-success"></i> 判断题：20道</li>
+                    </ul>
+                    <button class="btn btn-primary btn-lg" onclick="startExam()">开始考试</button>
+                </div>
+            </div>
+            
+            <div id="examContent" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>考试进行中</h4>
+                    <div class="badge bg-primary fs-6">
+                        题目 <span id="currentQuestion">1</span> / <span id="totalQuestions">140</span>
+                    </div>
+                </div>
+                
+                <div id="questionContainer">
+                    <!-- 题目内容将在这里动态加载 -->
+                </div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <button class="btn btn-outline-secondary" onclick="previousQuestion()" id="prevBtn" disabled>上一题</button>
+                    <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">下一题</button>
+                    <button class="btn btn-success" onclick="submitExam()" id="submitBtn" style="display: none;">提交考试</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 错题本页面 -->
+        <div id="wrongQuestionsPage" class="page" style="display: none;">
+            <h2>错题本</h2>
+            <div id="wrongQuestionsList">
+                <!-- 错题列表将在这里动态加载 -->
+            </div>
+        </div>
+
+        <!-- 考试记录页面 -->
+        <div id="historyPage" class="page" style="display: none;">
+            <h2>考试记录</h2>
+            <div id="examHistoryList">
+                <!-- 考试记录将在这里动态加载 -->
+            </div>
+        </div>
+
+        <!-- 管理后台页面 -->
+        <div id="adminPage" class="page" style="display: none;">
+            <div class="row mb-4">
+                <div class="col">
+                    <h2><i class="bi bi-gear"></i> 管理后台</h2>
+                </div>
+            </div>
+
+            <!-- 管理功能导航 -->
+            <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="questions-tab" data-bs-toggle="tab" data-bs-target="#questions" type="button" role="tab">
+                        <i class="bi bi-question-circle"></i> 题库管理
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">
+                        <i class="bi bi-people"></i> 用户管理
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="import-tab" data-bs-toggle="tab" data-bs-target="#import" type="button" role="tab">
+                        <i class="bi bi-upload"></i> 题库导入
+                    </button>
+                </li>
+            </ul>
+
+            <!-- 管理功能内容 -->
+            <div class="tab-content" id="adminTabContent">
+                <!-- 题库管理 -->
+                <div class="tab-pane fade show active" id="questions" role="tabpanel">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="questionSearch" placeholder="搜索题目...">
+                                <button class="btn btn-outline-secondary" onclick="searchQuestions()">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-danger" onclick="clearQuestions()">
+                                <i class="bi bi-trash"></i> 清空题库
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 题库统计 -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary" id="totalQuestions">0</h5>
+                                    <p class="card-text">总题数</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title text-success" id="singleQuestions">0</h5>
+                                    <p class="card-text">单选题</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title text-warning" id="multipleQuestions">0</h5>
+                                    <p class="card-text">多选题</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title text-info" id="judgeQuestions">0</h5>
+                                    <p class="card-text">判断题</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 题目列表 -->
+                    <div id="questionsList">
+                        <!-- 题目列表将在这里动态加载 -->
+                    </div>
+                </div>
+
+                <!-- 用户管理 -->
+                <div class="tab-pane fade" id="users" role="tabpanel">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <h4>用户列表</h4>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-primary" onclick="showCreateUser()">
+                                <i class="bi bi-person-plus"></i> 添加用户
+                            </button>
+                        </div>
+                    </div>
+                    <div id="usersList">
+                        <!-- 用户列表将在这里动态加载 -->
+                    </div>
+                </div>
+
+                <!-- 题库导入 -->
+                <div class="tab-pane fade" id="import" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-upload"></i> 题库导入</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info">
+                                        <h6><i class="bi bi-info-circle"></i> 导入说明：</h6>
+                                        <ul class="mb-0">
+                                            <li>支持 .xlsx 和 .xls 格式的Excel文件</li>
+                                            <li>系统会自动识别题目开始行和题型</li>
+                                            <li>支持多个工作表同时导入</li>
+                                            <li>重复题目会自动跳过</li>
+                                        </ul>
+                                    </div>
+                                    <form id="importForm" enctype="multipart/form-data">
+                                        <div class="mb-3">
+                                            <label for="excelFile" class="form-label">选择Excel文件</label>
+                                            <input type="file" class="form-control" id="excelFile" accept=".xlsx,.xls" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-upload"></i> 开始导入
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-bar-chart"></i> 导入记录</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="importLog">
+                                        <p class="text-muted">暂无导入记录</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创建用户模态框 -->
+    <div class="modal fade" id="createUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加用户</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createUserForm">
+                        <div class="mb-3">
+                            <label for="newUsername" class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="newUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newEmail" class="form-label">邮箱</label>
+                            <input type="email" class="form-control" id="newEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">密码</label>
+                            <input type="password" class="form-control" id="newPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newRole" class="form-label">角色</label>
+                            <select class="form-select" id="newRole">
+                                <option value="USER">普通用户</option>
+                                <option value="ADMIN">管理员</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="createUser()">创建用户</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">系统提示</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                <!-- 提示消息内容 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
